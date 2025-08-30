@@ -1,0 +1,29 @@
+Primero setié todo el backend, estos son los pasos:
+- npm init -y
+# Runtime
+- npm i express cors dotenv pg pg-hstore sequelize
+# Dev (CLI y types opcionales si usás TS)
+- npm i -D sequelize-cli nodemon
+- npx sequelize-cli init
+Me crea el esqueleto:
+project/
+ ├─ config/
+ │   └─ config.json
+ ├─ models/
+ │   └─ index.js
+ ├─ migrations/
+ ├─ seeders/
+ └─ node_modules/
+config/config.json → archivo de configuración de conexión a la base de datos (usuario, contraseña, host, dialecto, etc.).
+
+models/ → carpeta donde se definen los modelos de Sequelize.
+migrations/ → carpeta para almacenar las migraciones de la base de datos.
+
+seeders/ → carpeta para almacenar los seeders (datos iniciales para poblar la base).
+
+
+Luego hago la conexión con la base de datos:
+Creo el archivo .env con las variables mínimas de los datos de mi backend
+Luego configuro el sequelize para leer .env en el archivo config -> config.js, 
+Con esto, Sequelize va a tomar la conexión de process.env.DATABASE_URL.
+Me costo porque no estaba configurando bien los parametros que setie en la bd (user, host, etc)
