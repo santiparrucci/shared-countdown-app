@@ -1,3 +1,9 @@
+Librerias que usamos:
+bcrypt
+jsonwebtoken
+cookie-parser
+zod
+
 Primero setié todo el backend, estos son los pasos:
 - npm init -y
 # Runtime
