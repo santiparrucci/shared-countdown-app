@@ -27,3 +27,54 @@ Creo el archivo .env con las variables mínimas de los datos de mi backend
 Luego configuro el sequelize para leer .env en el archivo config -> config.js, 
 Con esto, Sequelize va a tomar la conexión de process.env.DATABASE_URL.
 Me costo porque no estaba configurando bien los parametros que setie en la bd (user, host, etc)
+
+------------------
+
+Organización del backend // Aprendiendo a crear los primeros endpoints
+
+backend/
+  models/               # modelos Sequelize (ya tenías)
+  src/
+    server.cjs          # punto de entrada (config global y routers)
+    routes/             # define rutas y métodos HTTP
+      health.js
+      countdowns.js
+    controllers/        # lógica de cada endpoint
+      health.js
+      countdowns.js
+    middlewares/        # (opcional) middlewares personalizados
+      error.js
+
+server.cjs
+Responsabilidad: Punto de entrada de la app.
+Qué hace:
+Configuración global (cors, express.json).
+Importar routers y montarlos (app.use("/countdowns", countdownsRouter)).
+Escuchar el puerto (app.listen(...)).
+Qué NO hace: Lógica de endpoints (eso va en controllers).
+
+routes/*.js
+Responsabilidad: Define las rutas y métodos HTTP.
+Ejemplo: routes/countdowns.js
+Qué NO hace: No accede directo a la DB.
+
+controllers/*.js
+Responsabilidad: Lógica de negocio.
+(leer/parsing de req, consultas Sequelize, devolver res).
+Ejemplo: controllers/countdowns.js
+
+middlewares/*.js (opcional)
+Responsabilidad: Código que corre antes o después de los controladores.
+Ejemplo: error.js para manejar errores centralizados.
+Se registran en server.cjs con app.use(...).
+
+5. Ejemplo de flujo: GET /countdowns
+Cliente llama a GET /countdowns?ownerId=123.
+Express encuentra el router en routes/countdowns.js.
+Ese router delega en controllers/countdowns.list.
+El controlador:
+Lee req.query.ownerId.
+Arma el where.
+Llama db.Countdown.findAll(...) con include: owner.
+Devuelve res.json(list).
+
